@@ -8,17 +8,17 @@ const isLoggedin = (req, res, next) => {
     const token = req.cookies.accessToken;
 
     if (!token) {
-      throw createError(404, "User not logged in. Please login first");
+      throw createError(404, "token not found");
     }
 
     const decoded = jwt.verify(token, process.env.ACCESS_KEY);
-   
+
     if (!decoded) {
       throw createError(401, "User was not able to be verified. Please try again");
     }
 
     req.body.user = decoded.user;
-    
+
     next();
   } catch (error) {
     console.log(error);
@@ -41,19 +41,18 @@ const isLoggedOut = (req, res, next) => {
 
 const isAdmin = (req, res, next) => {
   try {
-   const user = req.body.user;
+    const user = req.body.user;
 
-   if (!user.isAdmin) {
+    if (!user.isAdmin) {
       throw createError(403, "you're not a admin. you not access this route");
-   }
-   next();
+    }
+    next();
   } catch (error) {
     next(error);
   }
-};
+}
 
-// Create a middleware to handle token refresh
-const handleRefreshToken = async (req, res, next) => {
+const verifyRefreshToken = (req, res, next) => {
   try {
     const refreshToken = req.cookies.refreshToken;
 
@@ -61,35 +60,31 @@ const handleRefreshToken = async (req, res, next) => {
       throw createError(401, "Refresh token not provided");
     }
 
-    // Verify the refresh token
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_KEY);
 
     if (!decoded) {
-      throw createError(401, "Refresh token is invalid");
+      throw createError(401, "Invalid refresh token");
     }
 
-    // Extract user information from the decoded refresh token
-    const user = decoded.user;
+    // Set user information in the request body for future middleware
+    req.body.user = decoded.user;
 
-    // Generate a new access token
-    const newAccessToken = createJwt({ user }, process.env.ACCESS_KEY, "10m");
-
-    // Update the existing refresh token in the database (optional)
-    user.refreshToken = refreshToken;
-    await user.save();
-
-    // Send the new access token to the client
+    // Optionally, generate a new access token and send it in the response
+    const newAccessToken = createJwt({ user: decoded.user }, process.env.ACCESS_KEY, "1m");
     res.cookie("accessToken", newAccessToken, {
-      maxAge: 15 * 60 * 1000,
+      maxAge: 1 * 60 * 1000,
       httpOnly: true,
       sameSite: "none",
+      // secure: true, // Uncomment this line if using HTTPS
     });
 
     next();
   } catch (error) {
-    console.log(error)
+    console.log(error);
     next(error);
   }
 };
 
-module.exports = { isLoggedin, isLoggedOut, isAdmin, handleRefreshToken };
+
+
+module.exports = { isLoggedin, isLoggedOut, isAdmin, verifyRefreshToken };

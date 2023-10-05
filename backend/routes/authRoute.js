@@ -1,9 +1,10 @@
 const express = require("express");
-const { handleLogin, handleLogout } = require("../controllers/authController");
-const { isLoggedin, isLoggedOut, handleRefreshToken } = require("../middlewares/auth");
-const userRoute = express.Router();
+const { handleLogin, handleLogout, handleRefreshToken } = require("../controllers/authController");
+const { isLoggedin, isLoggedOut, verifyRefreshToken } = require("../middlewares/auth");
+const authRoute = express.Router();
 
-userRoute.post("/login", isLoggedOut, handleRefreshToken, handleLogin);
-userRoute.post("/logout", isLoggedin, handleLogout);
+authRoute.post("/login", isLoggedOut, handleLogin);
+authRoute.post("/logout", isLoggedin, handleLogout);
+authRoute.post("/refresh-token", verifyRefreshToken, handleRefreshToken);
 
-module.exports = userRoute;
+module.exports = authRoute;

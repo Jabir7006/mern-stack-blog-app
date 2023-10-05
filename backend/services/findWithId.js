@@ -1,6 +1,6 @@
 const  mongoose = require("mongoose");
 const createError = require("http-errors");
-mongoose
+
 
 const findWithId = async (Model, id, options = {}) => {
   try {

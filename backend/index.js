@@ -11,7 +11,7 @@ require('dotenv').config();
 const port = process.env.PORT || 5000;
 
 app.listen(port, async () => {
-    console.log(`Server running successfully at http://localhost:port`);
+    console.log(`Server running successfully at http://localhost:${port}`);
     await connectDB();
 });
 

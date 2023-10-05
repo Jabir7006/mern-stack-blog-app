@@ -33,76 +33,29 @@ const handleRegister = async (req, res, next) => {
   try {
     const { fullName, email, password, image } = req.body;
 
-    // Check if user already exists
+    // is user exist
+
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      throw createError(409, "User already exists. Please login.");
+      throw createError(409, "User already exists. Please login");
     }
 
-    // Create JSON web token
-    const imagePath = `public/images/users/${req.file.filename}`;
+    const imagePath = req.file ? `public/images/users/${req.file.filename}` : "";
 
-    const token = createJwt(
-      { fullName, email, password, image: imagePath },
-      process.env.SECRET_KEY,
-      "10m"
-    );
-
-    const clientUrl = process.env.CLIENT_URL;
-
-    const emailData = {
+    const newUser = await User.create({
+      fullName,
       email,
-      subject: "Account Verification",
-      html: `<h1>Hello ${fullName}</h1> <p>Please click here to activate your account</p> <a href="${clientUrl}/api/users/activate/${token}" target="_blank">Activate Account</a>`,
-    };
+      password,
+      image: imagePath,
+    });
 
-    await handleEmailSend(emailData, res, token);
+    return successResponse(res, {
+      statusCode: 201,
+      message: "User created successfully",
+      payload: { newUser },
+    });
   } catch (error) {
-    console.log(error);
-    next(error);
-  }
-};
-
-const activateUserAccount = async (req, res, next) => {
-  try {
-    const token = req.body.token;
-
-    if (!token) {
-      throw createError(404, "Token not found");
-    }
-
-    try {
-      const decoded = jwt.verify(token, process.env.SECRET_KEY);
-      console.log(decoded);
-      const existingUser = await User.findOne({ email: decoded.email });
-
-      if (existingUser) {
-        throw createError(409, "User already exists. Please login.");
-      }
-
-      if (!decoded) {
-        throw createError(401, "User was not able to be verified");
-      }
-
-      const newUser = await User.create(decoded);
-
-      return successResponse(res, {
-        statusCode: 200,
-        message: "User created successfully",
-        payload: { newUser },
-      });
-    } catch (error) {
-      if (error.name === "JsonWebTokenError") {
-        throw createError(401, "Invalid token");
-      } else if (error.name === "TokenExpiredError") {
-        throw createError(401, "Token has expired");
-      } else {
-        throw error;
-      }
-    }
-  } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -111,7 +64,7 @@ const getUser = async (req, res, next) => {
   try {
     const id = req.params.id;
     const options = { password: 0 };
-    const user = await findWithId(User, id, options, res);
+    const user = await findWithId(User, id, options);
 
     successResponse(res, {
       statusCode: 200,
@@ -159,4 +112,4 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-module.exports = { getUsers, handleRegister, getUser, updateUser, activateUserAccount };
+module.exports = { getUsers, handleRegister, getUser, updateUser };

@@ -4,11 +4,11 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 require("dotenv").config();
 const createJwt = require("../helper/createJwt");
+const jwt = require("jsonwebtoken");
 
 const handleLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    console.log(email, password);
 
     // Check if user already exists
     const user = await User.findOne({ email });
@@ -44,14 +44,13 @@ const handleLogin = async (req, res, next) => {
     });
 
     // Generate and save refresh token
-    const refreshToken = createJwt({ user }, process.env.REFRESH_KEY, "7d");
-    user.refreshToken = refreshToken;
-    await user.save();
 
-    // Send the refresh token to the client
+    const refreshToken = createJwt({ user }, process.env.REFRESH_KEY, "7d");
+
     res.cookie("refreshToken", refreshToken, {
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
+      // secure: true,
       sameSite: "none",
     });
 
@@ -69,6 +68,7 @@ const handleLogin = async (req, res, next) => {
 const handleLogout = async (req, res, next) => {
   try {
     res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
 
     return successResponse(res, {
       statusCode: 200,
@@ -79,4 +79,55 @@ const handleLogout = async (req, res, next) => {
   }
 };
 
-module.exports = { handleLogin, handleLogout };
+const handleRefreshToken = async (req, res, next) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      throw createError(401, "Refresh token not provided");
+    }
+
+    // Verify the refresh token
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_KEY);
+
+    if (!decoded) {
+      throw createError(401, "Invalid refresh token");
+    }
+
+    // Check if the user exists
+    const user = await User.findById(decoded.user._id);
+
+    if (!user) {
+      throw createError(404, "User not found");
+    }
+
+    // Optional: Implement additional checks (e.g., user is not banned)
+
+    // Generate a new access token
+    const newAccessToken = createJwt({ user }, process.env.ACCESS_KEY, "1m");
+
+    if (!newAccessToken) {
+      throw createError(500, "Failed to generate new access token");
+    }
+
+    // Update the access token in the response cookie
+    res.cookie("accessToken", newAccessToken, {
+      maxAge: 1 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "none",
+      // secure: true, // Uncomment this line if using HTTPS
+    });
+
+    return res.status(200).json({
+      message: "Access token refreshed successfully",
+      user: user.toJSON(),
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+module.exports = { handleRefreshToken };
+
+module.exports = { handleLogin, handleLogout, handleRefreshToken };
