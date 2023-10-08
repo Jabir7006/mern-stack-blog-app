@@ -6,20 +6,22 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const createJwt = require("../helper/createJwt");
 const findWithId = require("../services/findWithId");
+const { default: mongoose } = require("mongoose");
+const findAll = require("../services/findAllItems");
 
 const getUsers = async (req, res, next) => {
   try {
-    const allUser = await User.find();
+    const allUser = await findAll(User);
 
     if (!allUser) {
-      throw createError(404, "No users are found");
+      throw createError(404, "No users found");
     }
 
     return successResponse(res, {
       statusCode: 200,
       message: "All users returned successfully",
       payload: {
-        item: allUser.length,
+        total: allUser.length,
         allUser,
       },
     });
@@ -31,7 +33,7 @@ const getUsers = async (req, res, next) => {
 
 const handleRegister = async (req, res, next) => {
   try {
-    const { fullName, email, password, image } = req.body;
+    const { fullName, email, password, image, blogs } = req.body;
 
     // is user exist
 
@@ -43,17 +45,26 @@ const handleRegister = async (req, res, next) => {
 
     const imagePath = req.file ? `public/images/users/${req.file.filename}` : "";
 
-    const newUser = await User.create({
+    const token = createJwt(
+      { fullName, email, password, image: imagePath, blogs },
+      process.env.ACCESS_KEY,
+      "7d"
+    );
+
+    const createUser = new User({
       fullName,
       email,
       password,
       image: imagePath,
+      blogs: [],
     });
+
+    const user = await createUser.save();
 
     return successResponse(res, {
       statusCode: 201,
       message: "User created successfully",
-      payload: { newUser },
+      payload: { user, token },
     });
   } catch (error) {
     next(error);
@@ -64,7 +75,12 @@ const getUser = async (req, res, next) => {
   try {
     const id = req.params.id;
     const options = { password: 0 };
+
     const user = await findWithId(User, id, options);
+
+    if (!user) {
+      throw createError(404, "User not found with this id");
+    }
 
     successResponse(res, {
       statusCode: 200,
@@ -112,4 +128,30 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-module.exports = { getUsers, handleRegister, getUser, updateUser };
+const deleteUser = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const options = { password: 0 };
+    const user = await findWithId(User, id, options);
+
+    if (!user) {
+      throw createError(404, "User not found with this id");
+    }
+
+    const deleteduser = await User.findByIdAndDelete(id);
+
+    if (!deleteduser) {
+      throw createError(404, "user not found");
+    }
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "User deleted successfully",
+      payload: { deleteduser },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getUsers, handleRegister, getUser, updateUser, deleteUser };

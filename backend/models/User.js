@@ -31,7 +31,7 @@ const userSchema = new Schema(
     },
     image: {
       type: String,
-      default: "",
+      default: "bal",
     },
     isAdmin: {
       type: Boolean,
@@ -41,6 +41,13 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    blogs: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Blog",
+        required: true,
+      },
+    ],
   },
   { timestamps: true }
 );

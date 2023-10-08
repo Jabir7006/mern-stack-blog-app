@@ -5,6 +5,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/userContext";
+import useRegister from "../hooks/useRegister";
 
 const Register = () => {
   const [inputs, setInputs] = useState({
@@ -14,9 +15,7 @@ const Register = () => {
     image: "",
   });
 
-  const { user, setUser } = useContext(UserContext);
-
-  const navigate = useNavigate();
+  const { loading, handleRegister, loadingSpinner } = useRegister();
 
   const handleChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -24,33 +23,16 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      const formData = new FormData();
-      formData.append("fullName", inputs.fullName);
-      formData.append("email", inputs.email);
-      formData.append("password", inputs.password);
-      formData.append("image", inputs.image);
-
-      const response = await axios.post("http://localhost:3000/api/users/register", formData);
-
-      if (response.status === 201) {
-        toast.success(response.data.message);
-        setUser(response.data.payload.newUser);
-        navigate("/");
-      }
-
-      console.log(response);
-      console.log(user);
-    } catch (error) {
-      console.log(error.response);
-      console.log(error.message);
-      toast.error(error.response.data.message);
-    }
+    handleRegister(inputs);
   };
 
   return (
-    <section className="h-screen flex items-center">
+    <section className="flex items-center">
+      {loading && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-[9999]">
+          {loadingSpinner}
+        </div>
+      )}
       <div className="container mx-auto px-5 flex items-center justify-center pt-20">
         <form
           className="w-full max-w-md mt-20 mr-0 mb-0 ml-0 relative z-10 lg:mt-0 lg:w-5/12"
@@ -137,7 +119,10 @@ const Register = () => {
                 </div>
               </div>
               <p className="text-1xl text-center text-blue-500 font-medium">
-                already have an account? <Link to="/login">Login</Link>
+                already have an account?{" "}
+                <Link className="underline" to="/login">
+                  Login
+                </Link>
               </p>
               <div className="relative">
                 <button

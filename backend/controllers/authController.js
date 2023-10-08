@@ -5,6 +5,7 @@ const User = require("../models/User");
 require("dotenv").config();
 const createJwt = require("../helper/createJwt");
 const jwt = require("jsonwebtoken");
+const findWithId = require("../services/findWithId");
 
 const handleLogin = async (req, res, next) => {
   try {
@@ -28,36 +29,13 @@ const handleLogin = async (req, res, next) => {
       throw createError(401, "Your account has been banned. Please contact admin");
     }
 
-    // Create JWT access token
-    const accessToken = createJwt({ user }, process.env.ACCESS_KEY, "1m");
-
-    if (!accessToken) {
-      throw createError(404, "Token not found");
-    }
-
-    // Save the token in the cookie
-    res.cookie("accessToken", accessToken, {
-      maxAge: 1 * 60 * 1000,
-      httpOnly: true,
-      // secure: true,
-      sameSite: "none",
-    });
-
-    // Generate and save refresh token
-
-    const refreshToken = createJwt({ user }, process.env.REFRESH_KEY, "7d");
-
-    res.cookie("refreshToken", refreshToken, {
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      // secure: true,
-      sameSite: "none",
-    });
+    // Create JWT token
+    const token = createJwt({ user }, process.env.ACCESS_KEY, "7d");
 
     return successResponse(res, {
       statusCode: 200,
       message: "User logged in successfully",
-      payload: { user, refreshToken },
+      payload: { user, token },
     });
   } catch (error) {
     console.log(error);
@@ -67,9 +45,6 @@ const handleLogin = async (req, res, next) => {
 
 const handleLogout = async (req, res, next) => {
   try {
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
-
     return successResponse(res, {
       statusCode: 200,
       message: "User logged out successfully",
@@ -79,55 +54,16 @@ const handleLogout = async (req, res, next) => {
   }
 };
 
-const handleRefreshToken = async (req, res, next) => {
+const handleAuthCheck = async (req, res, next) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
 
-    if (!refreshToken) {
-      throw createError(401, "Refresh token not provided");
-    }
-
-    // Verify the refresh token
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_KEY);
-
-    if (!decoded) {
-      throw createError(401, "Invalid refresh token");
-    }
-
-    // Check if the user exists
-    const user = await User.findById(decoded.user._id);
-
-    if (!user) {
-      throw createError(404, "User not found");
-    }
-
-    // Optional: Implement additional checks (e.g., user is not banned)
-
-    // Generate a new access token
-    const newAccessToken = createJwt({ user }, process.env.ACCESS_KEY, "1m");
-
-    if (!newAccessToken) {
-      throw createError(500, "Failed to generate new access token");
-    }
-
-    // Update the access token in the response cookie
-    res.cookie("accessToken", newAccessToken, {
-      maxAge: 1 * 60 * 1000,
-      httpOnly: true,
-      sameSite: "none",
-      // secure: true, // Uncomment this line if using HTTPS
-    });
-
-    return res.status(200).json({
-      message: "Access token refreshed successfully",
-      user: user.toJSON(),
+    return successResponse(res, {
+      statusCode: 200,
+      message: "User authentication successfully",
     });
   } catch (error) {
-    console.error(error);
     next(error);
   }
 };
 
-module.exports = { handleRefreshToken };
-
-module.exports = { handleLogin, handleLogout, handleRefreshToken };
+module.exports = { handleLogin, handleLogout, handleAuthCheck };

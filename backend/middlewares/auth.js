@@ -1,23 +1,31 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const createError = require("http-errors");
-const createJwt = require("../helper/createJwt");
 
 const isLoggedin = (req, res, next) => {
   try {
-    const token = req.cookies.accessToken;
+    const ACCESS_KEY = process.env.ACCESS_KEY;
 
+    const authorization = req.headers.authorization;
+    if (!authorization) {
+      throw createError(401, "Authorization token not found");
+    }
+
+    const token = authorization.split("Bearer ")[1];
     if (!token) {
-      throw createError(404, "token not found");
+      throw createError(401, "Token not found");
     }
+    try {
+      const decoded = jwt.verify(token, ACCESS_KEY);
 
-    const decoded = jwt.verify(token, process.env.ACCESS_KEY);
+      req.user = decoded.user;
+    } catch (error) {
+      if (error.name === "JsonWebTokenError") {
+        throw createError(401, "Invalid token");
+      }
 
-    if (!decoded) {
-      throw createError(401, "User was not able to be verified. Please try again");
+      next(error);
     }
-
-    req.body.user = decoded.user;
 
     next();
   } catch (error) {
@@ -28,11 +36,14 @@ const isLoggedin = (req, res, next) => {
 
 const isLoggedOut = (req, res, next) => {
   try {
-    const token = req.cookies.accessToken;
+    // const authorization = req.headers.authorization;
 
-    if (token) {
-      throw createError(400, "user already logged in. please logout first");
-    }
+    // const token = authorization.split("Bearer ")[1];
+
+    // if (token) {
+    //   throw createError(400, "User already logged in. Please logout first");
+    // }
+
     next();
   } catch (error) {
     next(error);
@@ -41,7 +52,7 @@ const isLoggedOut = (req, res, next) => {
 
 const isAdmin = (req, res, next) => {
   try {
-    const user = req.body.user;
+    const user = req.user;
 
     if (!user.isAdmin) {
       throw createError(403, "you're not a admin. you not access this route");
@@ -50,41 +61,6 @@ const isAdmin = (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
-
-const verifyRefreshToken = (req, res, next) => {
-  try {
-    const refreshToken = req.cookies.refreshToken;
-
-    if (!refreshToken) {
-      throw createError(401, "Refresh token not provided");
-    }
-
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_KEY);
-
-    if (!decoded) {
-      throw createError(401, "Invalid refresh token");
-    }
-
-    // Set user information in the request body for future middleware
-    req.body.user = decoded.user;
-
-    // Optionally, generate a new access token and send it in the response
-    const newAccessToken = createJwt({ user: decoded.user }, process.env.ACCESS_KEY, "1m");
-    res.cookie("accessToken", newAccessToken, {
-      maxAge: 1 * 60 * 1000,
-      httpOnly: true,
-      sameSite: "none",
-      // secure: true, // Uncomment this line if using HTTPS
-    });
-
-    next();
-  } catch (error) {
-    console.log(error);
-    next(error);
-  }
 };
 
-
-
-module.exports = { isLoggedin, isLoggedOut, isAdmin, verifyRefreshToken };
+module.exports = { isLoggedin, isLoggedOut, isAdmin };
