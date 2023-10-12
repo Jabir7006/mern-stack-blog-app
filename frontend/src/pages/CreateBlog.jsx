@@ -8,7 +8,7 @@ import useLogin from "../hooks/useLogin";
 const CreateBlog = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const { token, user } = useContext(UserContext);
-  const { loading, loadingSpinner } = useLogin();
+  const { loading, setLoading, loadingSpinner } = useLogin();
   const [inputs, setInputs] = useState({
     title: "",
     content: "",
@@ -42,7 +42,7 @@ const CreateBlog = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("title", inputs.title);
@@ -58,10 +58,12 @@ const CreateBlog = () => {
       });
 
       if (response.status === 201) {
+        setLoading(false);
         toast.success(response.data.message);
         navigate("/");
       }
     } catch (error) {
+      setLoading(false);
       console.log(error.message);
       toast.error(error.response.data.message);
     }
@@ -70,7 +72,7 @@ const CreateBlog = () => {
   return (
     <section>
       {loading && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-[9999]">
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-[9999]">
           {loadingSpinner}
         </div>
       )}

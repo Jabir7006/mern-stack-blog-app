@@ -8,6 +8,7 @@ axios.defaults.withCredentials = true;
 
 const AfterLogin = () => {
   const { setIsLoggedIn } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const handleLogout = async () => {
     try {
@@ -25,7 +26,7 @@ const AfterLogin = () => {
         <Link className="font-medium" to="/create-blog">
           Create Blog
         </Link>
-        <Link className="font-medium" to="/my-blogs">
+        <Link className="font-medium" to={`/user/profile/${user._id}`}>
           My Blogs
         </Link>
         <button className="font-medium" onClick={handleLogout}>

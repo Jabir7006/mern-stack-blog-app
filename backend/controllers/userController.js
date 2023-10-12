@@ -108,13 +108,12 @@ const updateUser = async (req, res, next) => {
       }
     }
 
-    const image = req.file;
-    if (image) {
-      if (image.size > 1024 * 1024 * 2) {
-        throw createError(400, "Image size too large, must be less than 2MB");
-      }
-      updates.image = image.filename;
-    }
+    const image = req.file ? `public/images/users/${req.file?.filename}` : req.body.image;
+    updates.image =
+      image?.startsWith("data:image") || image?.startsWith("public/images/users/")
+        ? image
+        : `public/images/users/${req.file?.filename}`;
+    
 
     const updatedUser = await User.findByIdAndUpdate(id, updates, options);
 

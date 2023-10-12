@@ -67,7 +67,7 @@ const createBlog = async (req, res, next) => {
 const getSingleBlog = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const blog = await Blog.findById(id);
+    const blog = await Blog.findById(id).populate("author");
 
     if (!blog) {
       throw createError(404, "Blog not found with this id");
@@ -86,17 +86,17 @@ const getSingleBlog = async (req, res, next) => {
 
 const getSingleBlogByUserId = async (req, res, next) => {
   try {
-    const id = req.params.id;
-    const blog = await Blog.findById(id).populate("author");
+    const userId = req.params.id;
+    const user = await User.findById(userId).populate("blogs");
 
-    if (!blog) {
+    if (!user) {
       throw createError(404, "Blog not found with this id");
     }
 
     successResponse(res, {
       statusCode: 200,
       message: "Blog was returned successfully",
-      payload: { blog },
+      payload: { user },
     });
   } catch (error) {
     console.log(error);
@@ -119,9 +119,11 @@ const updateBlog = async (req, res, next) => {
       }
     }
 
-    const image = req.file ? req.file : req.body.thumbnail;
-    updates.image = image?.filename;
-
+    const image = req.file ? `public/images/blogs/${req.file.filename}` : req.body.thumbnail;
+    updates.thumbnail =
+      image.startsWith("data:image") || image.startsWith("public/images/blogs/")
+        ? image
+        : `public/images/blogs/${req.file.filename}`;
 
     const updatedBlog = await Blog.findByIdAndUpdate(id, updates, options).populate("author");
 

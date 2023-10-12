@@ -11,12 +11,10 @@ const BlogDetails = () => {
   const { loading, blog, getSingleBlog } = useSingleBlog();
   const { loadingSpinner } = useLogin();
 
-  console.log(blog);
-
   useEffect(() => {
     getSingleBlog(id);
   }, [id]);
-
+  console.log(blog);
   return (
     <div>
       {loading && (
@@ -44,9 +42,7 @@ const BlogDetails = () => {
                       {blog.author?.fullName}
                     </a>
 
-                    <p className="text-base text-gray-500 dark:text-gray-400">
-                      <p>08, July, 2023</p>
-                    </p>
+                    {blog.createdAt && <p className="text-base text-gray-500 dark:text-gray-400">{format(new Date(blog.createdAt), "dd, MMM, yyyy")}</p>}
                   </div>
                 </div>
               </address>

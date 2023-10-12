@@ -10,8 +10,8 @@ import useSingleBlog from "../hooks/useSingleBlog";
 import useLogin from "../hooks/useLogin";
 
 const Hero = ({ blogs }) => {
-  const heroBlogs = blogs.slice(0, 3);
-  
+  const heroBlogs = blogs.slice(blogs.length - 3);
+
   return (
     <section className="pt-12 pb-20 flex items-center">
       <div className="container mx-auto">
@@ -28,19 +28,24 @@ const Hero = ({ blogs }) => {
             clickable: true,
           }}
           modules={[Autoplay, Pagination, Navigation]}
-          className="hero bg-base-200 mt-8 pb-20"
+          className="hero bg-base-200 mt-8 pb-20 h-full"
         >
           {heroBlogs.map((blog) => (
             <SwiperSlide key={blog._id} className="hero-content flex gap-12">
               <img
                 className="object-cover h-[350px] rounded-lg shadow-md"
-                src="https://picsum.photos/500/400?random=4"
+                src={`http://localhost:3000/${blog.thumbnail}`}
               />
 
               <div>
                 <p className="my-5 font-bold">Category </p>
 
-                <Link to={`/blog/${blog._id}`} className="text-5xl font-bold">{blog.title}</Link>
+                <Link
+                  to={`/blog/${blog._id}`}
+                  className="text-5xl font-bold font-poppins hover:text-blue-600 duration-100 leading-[1.3em]"
+                >
+                  {blog.title}
+                </Link>
                 <p className="py-6 font-poppins text-gray-400 text-[.9rem] font-medium">
                   {blog.content.length > 300
                     ? blog.content.substring(0, 300) + " ..."
@@ -52,7 +57,12 @@ const Hero = ({ blogs }) => {
                     className="w-12 h-12 rounded-full object-cover"
                     alt="profile"
                   />
-                  <p className="font-semibold font-poppins">By {blog.author.fullName}</p>
+                  <Link
+                    to={`/user/profile/${blog.author._id}`}
+                    className="font-semibold font-poppins"
+                  >
+                    {blog.author.fullName}
+                  </Link>
                 </div>
                 <p className="text-blue-500 mt-5 font-poppins">
                   created at - {format(new Date(blog.createdAt), "dd, MMM, yyyy")}
@@ -61,6 +71,14 @@ const Hero = ({ blogs }) => {
             </SwiperSlide>
           ))}
         </Swiper>
+        <style>
+          {`
+            .swiper-pagination-bullet {
+              background-color: red;
+        
+            }
+          `}
+        </style>
       </div>
     </section>
   );

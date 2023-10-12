@@ -6,11 +6,13 @@ import useLogin from "./../hooks/useLogin";
 import { toast } from "react-toastify";
 import BlogCard from "../components/BlogCard";
 import Categories from "../components/Categories";
+import { BiSolidShow } from "react-icons/bi";
+import PopularPosts from "./PopularPosts";
 
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
   const { loading, setLoading, loadingSpinner } = useLogin();
-  const sliceBlogs = blogs.slice(3);
+  const [loadMore, setLoadMore] = useState(6);
 
   const getAllBlogs = async () => {
     try {
@@ -30,6 +32,10 @@ const Home = () => {
     }
   };
 
+  const handleDelete = (deletedBlogId) => {
+    setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== deletedBlogId));
+  };
+
   useEffect(() => {
     getAllBlogs();
   }, []);
@@ -39,7 +45,7 @@ const Home = () => {
   return (
     <main className="">
       {loading && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-[9999]">
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-[9999]">
           {loadingSpinner}
         </div>
       )}
@@ -54,11 +60,38 @@ const Home = () => {
           </div>
 
           <div className="flex flex-wrap p-4 w-[78%] gap-y-20 gap-x-8">
-            {sliceBlogs.map((blog) => (
-              <BlogCard key={blog._id} blog={blog} />
+            {blogs.slice(0, loadMore).map((blog) => (
+              <BlogCard key={blog._id} blog={blog} onDelete={() => handleDelete(blog._id)} />
             ))}
+
+            {blogs.length > loadMore ? (
+              <button
+                type="button"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-auto"
+                onClick={() => setLoadMore((prev) => prev + 3)}
+              >
+                Load More
+                <svg
+                  className="w-3.5 h-3.5 ml-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M1 5h12m0 0L9 1m4 4L9 9"
+                  />
+                </svg>
+              </button>
+            ) : null}
           </div>
         </div>
+
+        <PopularPosts blogs={blogs}/>
       </div>
     </main>
   );

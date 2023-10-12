@@ -11,6 +11,7 @@ import MyBlogs from "./pages/MyBlogs";
 import Footer from "./components/Footer";
 import BlogDetails from "./pages/BlogDetails";
 
+
 function App() {
   const { isLoggedIn, token } = useContext(UserContext);
 
@@ -31,7 +32,7 @@ function App() {
             path="/update-blog"
             element={isLoggedIn ? <UpdateBlog /> : <Navigate to="/login" />}
           />
-          <Route path="/my-blogs" element={isLoggedIn ? <MyBlogs /> : <Navigate to="/login" />} />
+          <Route path="/user/profile/:id" element={<MyBlogs />} />
           <Route path="/blog/:id" element={<BlogDetails />} />
           <Route
             path="/blog/update/:id"
