@@ -45,6 +45,9 @@ const handleLogin = async (req, res, next) => {
 
 const handleLogout = async (req, res, next) => {
   try {
+    const data = localStorage.removeItem("data");
+    
+
     return successResponse(res, {
       statusCode: 200,
       message: "User logged out successfully",
@@ -54,16 +57,4 @@ const handleLogout = async (req, res, next) => {
   }
 };
 
-const handleAuthCheck = async (req, res, next) => {
-  try {
-
-    return successResponse(res, {
-      statusCode: 200,
-      message: "User authentication successfully",
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-module.exports = { handleLogin, handleLogout, handleAuthCheck };
+module.exports = { handleLogin, handleLogout };

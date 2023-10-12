@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 5;
-import { Pagination } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
@@ -23,10 +23,14 @@ const PopularPosts = (props) => {
         simulateTouch={false}
         centeredSlides={true}
         spaceBetween={30}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: true,
+        }}
         pagination={{
           clickable: true,
         }}
-        modules={[Pagination]}
+        modules={[Pagination, Autoplay]}
       >
         {sliceBlog.map((blog) => (
           <SwiperSlide key={blog._id} className="max-w-[45rem] py-12">
@@ -40,13 +44,16 @@ const PopularPosts = (props) => {
               </div>
 
               <div className="p-6">
-                <p className="text-gray-400 text-[.9rem] font-poppins">
+                <p className="text-gray-400 text-[.9rem] font-poppins mb-2">
                   {format(new Date(blog.createdAt), "dd, MMM, yyyy")}
                 </p>
-                <h5 className="my-2 text-xl font-bold font-poppins leading-tight text-neutral-800 dark:text-neutral-50">
+                <Link
+                  to={`/blog/${blog._id}`}
+                  className="my-2 text-xl font-bold font-poppins leading-loose text-neutral-800 dark:text-neutral-50"
+                >
                   {blog.title}
-                </h5>
-                <p className="mb-4 font-poppins text-base text-neutral-400 text-[.87rem] dark:text-neutral-200">
+                </Link>
+                <p className="mb-4 font-poppins text-base text-slate-500 text-[.87rem] dark:text-neutral-200 mt-3 leading-7">
                   {blog.content.length > 300
                     ? blog.content.substring(0, 350) + " ..."
                     : blog.content}

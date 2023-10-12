@@ -58,7 +58,11 @@ const MyBlogs = () => {
   return (
     <section className="container mx-auto pb-8">
       <div className="flex items-center justify-center py-8">
-        <img src={`http://localhost:3000/${author?.image}`} className="w-28 h-28 rounded-full object-cover" alt="profile image" />
+        <img
+          src={`http://localhost:3000/${author?.image}`}
+          className="w-28 h-28 rounded-full object-cover"
+          alt="profile image"
+        />
       </div>
       {checkAuthor ? (
         <h3 className="text-5xl font-semibold text-center font-poppins mb-14 py-10">My Blogs</h3>
@@ -67,7 +71,7 @@ const MyBlogs = () => {
           Welcome {author.fullName} profile
         </h3>
       )}
-      <div className="flex mt-14 flex-wrap items-center justify-between gap-y-14">
+      <div className="flex mt-14 flex-wrap items-center justify-center md:justify-between gap-y-14">
         {loading && (
           <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-[9999]">
             {loadingSpinner}
@@ -77,7 +81,7 @@ const MyBlogs = () => {
         {blogs.map((blog) => (
           <div
             key={blog._id}
-            className="relative flex-shrink-0 max-w-sm w-full h-[500px] flex-col rounded-xl bg-white text-gray-700 shadow-md"
+            className="relative flex-shrink-0 max-w-md md:max-w-sm w-full h-[500px] flex-col rounded-xl bg-white text-gray-700 shadow-md"
           >
             <div className="relative mx-4 -mt-6 h-56 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
               <img

@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { UserContext } from "../context/userContext";
 
 const useLogin = () => {
-  const { setUser, setToken } = useContext(UserContext);
+  const { setUser, setToken, setIsLoggedIn } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -16,11 +16,12 @@ const useLogin = () => {
       const response = await axios.post("http://localhost:3000/api/users/login", { ...inputs });
 
       if (response.status === 200) {
-        const { user, token, message } = response.data.payload;
+        const { user, token } = response.data.payload;
         toast.success(response.data.message);
-        localStorage.setItem("data", JSON.stringify({ user, token }));
+        localStorage.setItem("user", JSON.stringify({ user }));
+        localStorage.setItem("token", token);
         setLoading(false);
-
+        setIsLoggedIn(true);
         setToken(token);
         setUser(user);
         navigate("/");
@@ -28,6 +29,7 @@ const useLogin = () => {
 
       console.log(response);
     } catch (error) {
+      setIsLoggedIn(false);
       setLoading(false);
       setToken(null);
       setUser(null);

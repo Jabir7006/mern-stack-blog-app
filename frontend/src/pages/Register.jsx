@@ -1,10 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import React, { useContext, useEffect, useState } from "react";
 import CircleSvg from "../components/CircleSvg";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { UserContext } from "../context/userContext";
+import { Link } from "react-router-dom";
 import useRegister from "../hooks/useRegister";
 
 const Register = () => {
@@ -29,7 +26,7 @@ const Register = () => {
   return (
     <section className="flex items-center">
       {loading && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-[9999]">
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-[9999]">
           {loadingSpinner}
         </div>
       )}

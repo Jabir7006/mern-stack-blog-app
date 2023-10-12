@@ -71,24 +71,45 @@ const handleRegister = async (req, res, next) => {
   }
 };
 
-const getUser = async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    const options = { password: 0 };
+// const getUser = async (req, res, next) => {
+//   try {
+//     const id = req.params.id;
+//     const options = { password: 0 };
 
-    const user = await findWithId(User, id, options);
+//     const user = await findWithId(User, id, options);
+
+//     if (!user) {
+//       throw createError(404, "User not found with this id");
+//     }
+
+//     successResponse(res, {
+//       statusCode: 200,
+//       message: "User returned successfully",
+//       payload: { user },
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//   }
+// };
+
+const getProfile = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+
+    const options = { password: 0 };
+    const user = await findWithId(User, userId, options);
 
     if (!user) {
-      throw createError(404, "User not found with this id");
+      throw createError(404, "User not found");
     }
 
     successResponse(res, {
       statusCode: 200,
-      message: "User returned successfully",
+      message: "User profile retrieved successfully",
       payload: { user },
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -113,7 +134,6 @@ const updateUser = async (req, res, next) => {
       image?.startsWith("data:image") || image?.startsWith("public/images/users/")
         ? image
         : `public/images/users/${req.file?.filename}`;
-    
 
     const updatedUser = await User.findByIdAndUpdate(id, updates, options);
 
@@ -153,4 +173,4 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { getUsers, handleRegister, getUser, updateUser, deleteUser };
+module.exports = { getUsers, handleRegister, getProfile, updateUser, deleteUser };

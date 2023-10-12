@@ -18,7 +18,7 @@ const BlogDetails = () => {
   return (
     <div>
       {loading && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-[9999]">
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-[9999]">
           {loadingSpinner}
         </div>
       )}
@@ -31,7 +31,7 @@ const BlogDetails = () => {
                   <img
                     className="mr-4 w-16 h-16 rounded-full object-cover"
                     src={`http://localhost:3000/${blog.author?.image}`}
-                    alt="image"
+                    alt="avatar"
                   />
                   <div>
                     <a
@@ -42,7 +42,11 @@ const BlogDetails = () => {
                       {blog.author?.fullName}
                     </a>
 
-                    {blog.createdAt && <p className="text-base text-gray-500 dark:text-gray-400">{format(new Date(blog.createdAt), "dd, MMM, yyyy")}</p>}
+                    {blog.createdAt && (
+                      <p className="text-base text-gray-500 dark:text-gray-400">
+                        {format(new Date(blog.createdAt), "dd, MMM, yyyy")}
+                      </p>
+                    )}
                   </div>
                 </div>
               </address>
@@ -56,7 +60,7 @@ const BlogDetails = () => {
               <img
                 className="rounded-md mb-3"
                 src={`http://localhost:3000/${blog.thumbnail}`}
-                alt
+                alt="img-blur-shadow"
               />
             </figure>
 

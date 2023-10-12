@@ -2,7 +2,7 @@ const multer = require("multer");
 const path = require("path");
 
 const MAX_FILE_SIZE = 1024 * 1024 * 5; // 5MB
-const ALLOWED_FILE_TYPES = ["jpg", "jpeg", "png"];
+const ALLOWED_FILE_TYPES = ["jpg", "jpeg", "png", "webp"];
 const UPLOAD_DIR = "public/images/blogs";
 
 const storage = multer.diskStorage({

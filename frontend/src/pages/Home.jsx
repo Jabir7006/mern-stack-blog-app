@@ -8,11 +8,14 @@ import BlogCard from "../components/BlogCard";
 import Categories from "../components/Categories";
 import { BiSolidShow } from "react-icons/bi";
 import PopularPosts from "./PopularPosts";
+import NewestPost from "../components/NewestPost";
+import NewsLatter from "../components/NewsLatter";
 
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
   const { loading, setLoading, loadingSpinner } = useLogin();
   const [loadMore, setLoadMore] = useState(6);
+  const { search, setSearch } = useContext(UserContext);
 
   const getAllBlogs = async () => {
     try {
@@ -36,6 +39,10 @@ const Home = () => {
     setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== deletedBlogId));
   };
 
+  const filteredBlogs = blogs.filter((blog) => {
+    return blog.title.toLowerCase().includes(search.toLowerCase());
+  });
+
   useEffect(() => {
     getAllBlogs();
   }, []);
@@ -43,7 +50,7 @@ const Home = () => {
   console.log(blogs);
 
   return (
-    <main className="">
+    <main className="bg-[#fcfbfb]">
       {loading && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-[9999]">
           {loadingSpinner}
@@ -54,44 +61,48 @@ const Home = () => {
           <Hero blogs={blogs} />
         </div>
 
-        <div className="flex justify-between gap-2">
-          <div className="w-1/5">
-            <Categories />
-          </div>
+        <div className="flex flex-wrap items-center justify-center px-3 md:p-4 gap-y-20 gap-x-6">
+          {filteredBlogs.slice(0, loadMore).map((blog) => (
+            <BlogCard key={blog._id} blog={blog} onDelete={() => handleDelete(blog._id)} />
+          ))}
 
-          <div className="flex flex-wrap p-4 w-[78%] gap-y-20 gap-x-8">
-            {blogs.slice(0, loadMore).map((blog) => (
-              <BlogCard key={blog._id} blog={blog} onDelete={() => handleDelete(blog._id)} />
-            ))}
-
-            {blogs.length > loadMore ? (
-              <button
-                type="button"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-auto"
-                onClick={() => setLoadMore((prev) => prev + 3)}
+          {filteredBlogs.length > loadMore ? (
+            <button
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-auto"
+              onClick={() => setLoadMore((prev) => prev + 3)}
+            >
+              Load More
+              <svg
+                className="w-3.5 h-3.5 ml-2"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
               >
-                Load More
-                <svg
-                  className="w-3.5 h-3.5 ml-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
-              </button>
-            ) : null}
-          </div>
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                />
+              </svg>
+            </button>
+          ) : null}
         </div>
 
-        <PopularPosts blogs={blogs}/>
+        <div className="px-3">
+          <PopularPosts blogs={blogs} />
+        </div>
+
+        <div className="px-3">
+          <NewestPost blogs={blogs} />
+        </div>
+
+        <div>
+          <NewsLatter />
+        </div>
       </div>
     </main>
   );

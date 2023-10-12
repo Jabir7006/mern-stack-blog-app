@@ -70,7 +70,7 @@ const CreateBlog = () => {
   };
 
   return (
-    <section>
+    <section className="px-6">
       {loading && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-[9999]">
           {loadingSpinner}
@@ -87,7 +87,7 @@ const CreateBlog = () => {
         />
         <form
           onSubmit={handleSubmit}
-          className="editor mx-auto w-10/12 flex flex-col text-gray-800 border border-gray-300 p-4 shadow-lg max-w-2xl"
+          className="editor mx-auto md:w-10/12 flex flex-col text-gray-800 border border-gray-300 p-4 shadow-lg max-w-2xl"
         >
           Thumbnail
           <input

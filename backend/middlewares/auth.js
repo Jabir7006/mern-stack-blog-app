@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const createError = require("http-errors");
 
-const isLoggedin = (req, res, next) => {
+const isLoggedin = async (req, res, next) => {
   try {
     const ACCESS_KEY = process.env.ACCESS_KEY;
 
@@ -15,34 +15,33 @@ const isLoggedin = (req, res, next) => {
     if (!token) {
       throw createError(401, "Token not found");
     }
-    try {
-      const decoded = jwt.verify(token, ACCESS_KEY);
 
+    try {
+      const decoded = await jwt.verify(token, ACCESS_KEY);
       req.user = decoded.user;
+      next();
     } catch (error) {
       if (error.name === "JsonWebTokenError") {
         throw createError(401, "Invalid token");
       }
-
       next(error);
     }
-
-    next();
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
 
 const isLoggedOut = (req, res, next) => {
   try {
-    // const authorization = req.headers.authorization;
+    const authorization = req.headers.authorization;
 
-    // const token = authorization.split("Bearer ")[1];
+    if (authorization) {
+      const token = authorization.split("Bearer ")[1];
 
-    // if (token) {
-    //   throw createError(400, "User already logged in. Please logout first");
-    // }
+      if (token) {
+        throw createError(400, "User already logged in. Please logout first");
+      }
+    }
 
     next();
   } catch (error) {
@@ -55,12 +54,11 @@ const isAdmin = (req, res, next) => {
     const user = req.user;
 
     if (!user.isAdmin) {
-      throw createError(403, "you're not a admin. you not access this route");
+      throw createError(403, "You're not an admin. You cannot access this route");
     }
     next();
   } catch (error) {
     next(error);
   }
 };
-
 module.exports = { isLoggedin, isLoggedOut, isAdmin };

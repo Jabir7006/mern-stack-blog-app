@@ -1,19 +1,24 @@
-import React, { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, NavLink } from "react-router-dom";
 import { UserContext } from "../context/userContext";
-import axios from "axios";
+
 import { toast } from "react-toastify";
-import Cookies from "js-cookie";
-axios.defaults.withCredentials = true;
+
 
 const AfterLogin = () => {
   const { setIsLoggedIn } = useContext(UserContext);
-  const { user } = useContext(UserContext);
+  const { user, setUser, setToken } = useContext(UserContext);
 
   const handleLogout = async () => {
     try {
-      localStorage.removeItem("data");
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+
       toast.success("Logout successful");
+      setIsLoggedIn(false);
+      setUser(null);
+      setToken(null);
+      setIsLoggedIn(false);
     } catch (error) {
       console.error("Logout failed", error);
       toast.error("Logout failed");
@@ -23,13 +28,13 @@ const AfterLogin = () => {
   return (
     <div>
       <div className="flex gap-5">
-        <Link className="font-medium" to="/create-blog">
+        <NavLink className="font-medium hover:text-orange-500 duration-150" to="/create-blog">
           Create Blog
-        </Link>
-        <Link className="font-medium" to={`/user/profile/${user._id}`}>
+        </NavLink>
+        <NavLink className="font-medium hover:text-orange-500 duration-150" to={`/user/profile/${user._id}`}>
           My Blogs
-        </Link>
-        <button className="font-medium" onClick={handleLogout}>
+        </NavLink>
+        <button className="font-medium hover:text-orange-500 duration-150" onClick={handleLogout}>
           Logout
         </button>
       </div>

@@ -11,7 +11,6 @@ import MyBlogs from "./pages/MyBlogs";
 import Footer from "./components/Footer";
 import BlogDetails from "./pages/BlogDetails";
 
-
 function App() {
   const { isLoggedIn, token } = useContext(UserContext);
 
