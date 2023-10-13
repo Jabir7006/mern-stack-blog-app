@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import useLogin from "../hooks/useLogin";
 import { format } from "date-fns";
 import useSingleBlog from "../hooks/useSingleBlog";
+import { baseURL } from "../../Api/api";
 
 const BlogDetails = () => {
   const { id } = useParams();
@@ -30,7 +31,7 @@ const BlogDetails = () => {
                 <div className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
                   <img
                     className="mr-4 w-16 h-16 rounded-full object-cover"
-                    src={`http://localhost:3000/${blog.author?.image}`}
+                    src={`${baseURL}/${blog.author?.image}`}
                     alt="avatar"
                   />
                   <div>
@@ -59,7 +60,7 @@ const BlogDetails = () => {
             <figure>
               <img
                 className="rounded-md mb-3"
-                src={`http://localhost:3000/${blog.thumbnail}`}
+                src={`${baseURL}/${blog.thumbnail}`}
                 alt="img-blur-shadow"
               />
             </figure>

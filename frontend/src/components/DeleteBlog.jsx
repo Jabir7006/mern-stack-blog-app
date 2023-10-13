@@ -4,6 +4,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { UserContext } from "../context/userContext";
 import { toast } from "react-toastify";
 import useLogin from "../hooks/useLogin";
+import { baseURL } from "../../Api/api";
 
 const DeleteBlog = ({ id, onDelete }) => {
   const { token } = useContext(UserContext);
@@ -12,7 +13,7 @@ const DeleteBlog = ({ id, onDelete }) => {
     try {
       onDelete();
 
-      const response = await axios.delete(`http://localhost:3000/api/blogs/${id}`, {
+      const response = await axios.delete(`${baseURL}/api/blogs/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

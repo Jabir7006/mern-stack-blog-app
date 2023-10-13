@@ -5,6 +5,7 @@ import AfterLogin from "./AfterLogin";
 import { UserContext } from "../context/userContext";
 import { FaRegUserCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { baseURL } from "../../Api/api";
 
 const NavBar = () => {
   const { isLoggedIn, setIsLoggedIn, setToken, setUser, setSearch, user } = useContext(UserContext);
@@ -106,7 +107,7 @@ const NavBar = () => {
 
           {user && user.image && isLoggedIn ? (
             <img
-              src={`http://localhost:3000/${user?.image}`}
+              src={`${baseURL}/${user?.image}`}
               className="w-10 object-cover h-10 rounded-full cursor-pointer"
               onClick={() => setOpen(!open)}
               alt="avatar"

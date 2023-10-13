@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import React from "react";
 import { Link } from "react-router-dom";
+import { baseURL } from "../../Api/api";
 
 const NewestPost = ({ blogs }) => {
   const sliceBlogs = blogs.slice(0, 6);
@@ -14,7 +15,7 @@ const NewestPost = ({ blogs }) => {
             <div className="lg:flex justify-center items-center">
               <img
                 className="object-center w-full h-48 rounded-lg lg:w-64"
-                src={`http://localhost:3000/${blog.thumbnail}`}
+                src={`${baseURL}/${blog.thumbnail}`}
                 alt={blog.title}
               />
               <div className="flex flex-col justify-between py-6 lg:mx-6">
@@ -29,7 +30,7 @@ const NewestPost = ({ blogs }) => {
                 <div className="flex items-center gap-3 py-3">
                   <img
                     className="w-12 h-12 rounded-full object-cover"
-                    src={`http://localhost:3000/${blog.author.image}`}
+                    src={`${baseURL}/${blog.author.image}`}
                     alt=""
                   />
 

@@ -5,6 +5,7 @@ import useLogin from "../hooks/useLogin";
 import axios from "axios";
 import { toast } from "react-toastify";
 import useSingleBlog from "../hooks/useSingleBlog";
+import { baseURL } from "../../Api/api";
 
 const UpdateBlog = () => {
   const { token } = useContext(UserContext);
@@ -69,7 +70,7 @@ const UpdateBlog = () => {
       formData.append("content", inputs.content);
       formData.append("thumbnail", inputs.thumbnail); // Use the file object
 
-      const response = await axios.put(`http://localhost:3000/api/blogs/${id}`, formData, {
+      const response = await axios.put(`${baseURL}/api/blogs/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -114,7 +115,7 @@ const UpdateBlog = () => {
           />
           {inputs.thumbnail && (
             <img
-              src={`http://localhost:3000/${inputs.thumbnail}`}
+              src={`${baseURL}/${inputs.thumbnail}`}
               alt="Preview"
               className="mb-4 max-w-full max-h-80"
             />

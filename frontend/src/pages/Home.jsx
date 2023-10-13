@@ -5,11 +5,10 @@ import axios from "axios";
 import useLogin from "./../hooks/useLogin";
 import { toast } from "react-toastify";
 import BlogCard from "../components/BlogCard";
-import Categories from "../components/Categories";
-import { BiSolidShow } from "react-icons/bi";
 import PopularPosts from "./PopularPosts";
 import NewestPost from "../components/NewestPost";
 import NewsLatter from "../components/NewsLatter";
+import { baseURL } from "../../Api/api";
 
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
@@ -21,7 +20,7 @@ const Home = () => {
     try {
       setLoading(true);
 
-      const response = await axios.get("http://localhost:3000/api/blogs");
+      const response = await axios.get(`${baseURL}/api/blogs`);
 
       if (response.status === 200) {
         setLoading(false);

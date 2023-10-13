@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/userContext";
 import useLogin from "../hooks/useLogin";
+import { baseURL } from "../../Api/api";
 
 const CreateBlog = () => {
   const [imagePreview, setImagePreview] = useState(null);
@@ -50,7 +51,7 @@ const CreateBlog = () => {
       formData.append("thumbnail", inputs.thumbnail);
       formData.append("author", user._id);
 
-      const response = await axios.post("http://localhost:3000/api/blogs/create-blog", formData, {
+      const response = await axios.post(`${baseURL}/api/blogs/create-blog`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,

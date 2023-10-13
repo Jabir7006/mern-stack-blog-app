@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { Link, useParams } from "react-router-dom";
 import useSingleBlog from "../hooks/useSingleBlog";
 import useLogin from "../hooks/useLogin";
+import { baseURL } from "../../Api/api";
 
 const Hero = ({ blogs }) => {
   const heroBlogs = blogs.slice(blogs.length - 3);
@@ -37,7 +38,7 @@ const Hero = ({ blogs }) => {
             >
               <img
                 className="object-cover w-full h-full md:h-[350px] rounded-lg shadow-md"
-                src={`http://localhost:3000/${blog.thumbnail}`}
+                src={`${baseURL}/${blog.thumbnail}`}
               />
 
               <div>
@@ -56,7 +57,7 @@ const Hero = ({ blogs }) => {
                 </p>
                 <div className="flex items-center gap-3">
                   <img
-                    src={`http://localhost:3000/${blog.author.image}`}
+                    src={`${baseURL}/${blog.author.image}`}
                     className="w-12 h-12 rounded-full object-cover"
                     alt="profile"
                   />

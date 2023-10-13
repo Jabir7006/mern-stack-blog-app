@@ -8,6 +8,7 @@ import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { baseURL } from "../../Api/api";
 
 const PopularPosts = (props) => {
   const { blogs } = props;
@@ -38,7 +39,7 @@ const PopularPosts = (props) => {
               <div className="relative overflow-hidden bg-cover bg-no-repeat">
                 <img
                   className="rounded-lg h-[440px] object-cover max-w-[42rem] mx-auto w-full"
-                  src={`http://localhost:3000/${blog.thumbnail}`}
+                  src={`${baseURL}/${blog.thumbnail}`}
                   alt="img-blur-shadow"
                 />
               </div>
@@ -64,7 +65,7 @@ const PopularPosts = (props) => {
                 >
                   <div className="flex items-center gap-2">
                     <img
-                      src={`http://localhost:3000/${blog.author.image}`}
+                      src={`${baseURL}/${blog.author.image}`}
                       className="w-12 h-12 rounded-full object-cover mt-5"
                       alt=""
                     />

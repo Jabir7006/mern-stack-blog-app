@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/userContext";
+import { baseURL } from "../../Api/api";
 
 const useRegister = () => {
   const { setUser, setToken, setIsLoggedIn } = useContext(UserContext);
@@ -19,7 +20,7 @@ const useRegister = () => {
       formData.append("password", inputs.password);
       formData.append("image", inputs.image);
 
-      const response = await axios.post("http://localhost:3000/api/users/register", formData);
+      const response = await axios.post(`${baseURL}/api/users/register`, formData);
 
       if (response.status === 201) {
         const { user, token } = response.data.payload;

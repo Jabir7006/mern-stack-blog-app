@@ -7,6 +7,7 @@ import axios from "axios";
 import useLogin from "../hooks/useLogin";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
+import { baseURL } from "../../Api/api";
 
 const MyBlogs = () => {
   const { user, token } = useContext(UserContext);
@@ -21,7 +22,7 @@ const MyBlogs = () => {
     setLoading(true);
 
     try {
-      const response = await axios.get(`http://localhost:3000/api/blogs/user/${id}`, {
+      const response = await axios.get(`${baseURL}/api/blogs/user/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -59,7 +60,7 @@ const MyBlogs = () => {
     <section className="container mx-auto pb-8">
       <div className="flex items-center justify-center py-8">
         <img
-          src={`http://localhost:3000/${author?.image}`}
+          src={`${baseURL}/${author?.image}`}
           className="w-28 h-28 rounded-full object-cover"
           alt="profile image"
         />
@@ -85,7 +86,7 @@ const MyBlogs = () => {
           >
             <div className="relative mx-4 -mt-6 h-56 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
               <img
-                src={`http://localhost:3000/${blog.thumbnail}`}
+                src={`${baseURL}/${blog.thumbnail}`}
                 className="object-cover"
                 alt="img-blur-shadow"
               />

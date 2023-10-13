@@ -6,6 +6,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { UserContext } from "../context/userContext";
 import axios from "axios";
 import DeleteBlog from "./DeleteBlog";
+import { baseURL } from "../../Api/api";
 
 const BlogCard = ({ blog, onDelete }) => {
   const { user } = useContext(UserContext);
@@ -24,7 +25,7 @@ const BlogCard = ({ blog, onDelete }) => {
       <div className="relative mx-4 -mt-6 h-56 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
         <img
           className="w-full h-full object-cover"
-          src={`http://localhost:3000/${blog.thumbnail}`}
+          src={`${baseURL}/${blog.thumbnail}`}
           alt="img-blur-shadow"
         />
       </div>
@@ -45,7 +46,7 @@ const BlogCard = ({ blog, onDelete }) => {
       <div className="flex justify-between items-center gap-3 p-6 pt-0">
         <div className="flex items-center gap-2">
           <img
-            src={`http://localhost:3000/${blog.author.image}`}
+            src={`${baseURL}/${blog.author.image}`}
             className="w-12 h-12 rounded-full object-cover"
             alt="profile"
           />

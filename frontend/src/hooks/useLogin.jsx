@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/userContext";
+import { baseURL } from "./../../Api/api";
 
 const useLogin = () => {
   const { setUser, setToken, setIsLoggedIn } = useContext(UserContext);
@@ -13,7 +14,7 @@ const useLogin = () => {
     try {
       setLoading(true);
 
-      const response = await axios.post("http://localhost:3000/api/users/login", { ...inputs });
+      const response = await axios.post(`${baseURL}/api/users/login`, { ...inputs });
 
       if (response.status === 200) {
         const { user, token } = response.data.payload;
