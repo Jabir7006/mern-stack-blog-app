@@ -20,9 +20,13 @@ const BlogCard = ({ blog, onDelete }) => {
   }, []);
 
   return (
-    <div className="relative flex md:max-w-[25rem] w-full h-auto flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+    <div className="relative flex md:max-w-[22rem] lg:max-w-[25rem] w-full h-auto flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
       <div className="relative mx-4 -mt-6 h-56 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-        <img className="w-full h-full object-cover" src={`http://localhost:3000/${blog.thumbnail}`} alt="img-blur-shadow" />
+        <img
+          className="w-full h-full object-cover"
+          src={`http://localhost:3000/${blog.thumbnail}`}
+          alt="img-blur-shadow"
+        />
       </div>
       <p className="text-gray-400 text-[.9rem] mt-5 font-poppins px-6 pb-0">
         created at - {format(new Date(blog.createdAt), "dd, MMM, yyyy")}

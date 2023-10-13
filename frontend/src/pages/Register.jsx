@@ -30,7 +30,7 @@ const Register = () => {
           {loadingSpinner}
         </div>
       )}
-      <div className="container mx-auto px-5 flex items-center justify-center pt-20">
+      <div className="container mx-auto px-4 md:px-5 flex items-center justify-center md:pt-20">
         <form
           className="w-full max-w-md mt-20 mr-0 mb-0 ml-0 relative z-10 lg:mt-0 lg:w-5/12"
           onSubmit={handleSubmit}

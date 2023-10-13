@@ -28,13 +28,13 @@ const AfterLogin = () => {
   return (
     <div>
       <div className="flex gap-5">
-        <NavLink className="font-medium hover:text-orange-500 duration-150" to="/create-blog">
+        <NavLink className="font-medium hover:text-blue-500 duration-150" to="/create-blog">
           Create Blog
         </NavLink>
-        <NavLink className="font-medium hover:text-orange-500 duration-150" to={`/user/profile/${user._id}`}>
+        <NavLink className="font-medium hover:text-blue-500 duration-150" to={`/user/profile/${user._id}`}>
           My Blogs
         </NavLink>
-        <button className="font-medium hover:text-orange-500 duration-150" onClick={handleLogout}>
+        <button className="font-medium hover:text-red-600 duration-150" onClick={handleLogout}>
           Logout
         </button>
       </div>

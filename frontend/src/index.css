@@ -10,5 +10,8 @@ body {
 
 .active {
   --tw-text-opacity: 1;
-  color: rgb(249 115 22 / var(--tw-text-opacity));
+  color: rgb(59 130 246 / var(--tw-text-opacity));
 }
+
+
+

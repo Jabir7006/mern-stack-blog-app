@@ -61,7 +61,7 @@ const Home = () => {
           <Hero blogs={blogs} />
         </div>
 
-        <div className="flex flex-wrap items-center justify-center px-3 md:p-4 gap-y-20 gap-x-6">
+        <div className="flex flex-wrap items-center justify-center px-3 md:p-4 gap-y-20 gap-x-6 ">
           {filteredBlogs.slice(0, loadMore).map((blog) => (
             <BlogCard key={blog._id} blog={blog} onDelete={() => handleDelete(blog._id)} />
           ))}

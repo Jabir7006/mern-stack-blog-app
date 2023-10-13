@@ -27,10 +27,7 @@ function App() {
             path="/create-blog"
             element={isLoggedIn ? <CreateBlog /> : <Navigate to="/login" />}
           />
-          <Route
-            path="/update-blog"
-            element={isLoggedIn ? <UpdateBlog /> : <Navigate to="/login" />}
-          />
+
           <Route path="/user/profile/:id" element={<MyBlogs />} />
           <Route path="/blog/:id" element={<BlogDetails />} />
           <Route

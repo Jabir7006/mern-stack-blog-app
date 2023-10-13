@@ -33,7 +33,7 @@ const Hero = ({ blogs }) => {
           {heroBlogs.map((blog) => (
             <SwiperSlide
               key={blog._id}
-              className="hero-content flex flex-col md:flex-row md:gap-12"
+              className="hero-content flex flex-col lg:flex-row md:gap-12"
             >
               <img
                 className="object-cover w-full h-full md:h-[350px] rounded-lg shadow-md"

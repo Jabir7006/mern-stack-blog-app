@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import AfterLogin from "./AfterLogin";
@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 const NavBar = () => {
   const { isLoggedIn, setIsLoggedIn, setToken, setUser, setSearch, user } = useContext(UserContext);
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleLogout = async () => {
     try {
@@ -25,8 +26,23 @@ const NavBar = () => {
       toast.error("Logout failed");
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
   return (
-    <header className="border-b border-gray-200 shadow h-26 md:h-[4.5rem] md:flex px-3 md:px-0">
+    <header className="border-b border-gray-200 shadow h-26 md:h-[4.5rem] md:flex px-3">
       <div className="container mx-auto flex items-center justify-between ">
         <div className="">
           <Link to="/" className="hidden md:block text-2xl font-poppins font-bold">
@@ -87,34 +103,47 @@ const NavBar = () => {
               Jabir <span className="text-blue-500">Blog</span>
             </Link>
           </div>
-          <FaRegUserCircle
-            size={25}
-            onClick={() => setOpen(!open)}
-            className="cursor-pointer hover:scale-105"
-          />
+
+          {user && user.image && isLoggedIn ? (
+            <img
+              src={`http://localhost:3000/${user?.image}`}
+              className="w-10 object-cover h-10 rounded-full cursor-pointer"
+              onClick={() => setOpen(!open)}
+              alt="avatar"
+            />
+          ) : (
+            <FaRegUserCircle
+              size={25}
+              onClick={() => setOpen(!open)}
+              className="cursor-pointer hover:scale-105"
+            />
+          )}
 
           {open && (
-            <div className="dropdown dropdown-end absolute top-8 right-0 bg-white drop-shadow-md opacity-100 scale-100 transform">
+            <div
+              ref={dropdownRef}
+              className="dropdown dropdown-end absolute top-8 right-0 bg-white drop-shadow-md opacity-100 scale-100 transform"
+            >
               {!isLoggedIn ? (
                 <ul
                   tabIndex={0}
                   className="dropdown-content z-[1] menu shadow bg-base-100 rounded-box w-32 p-3"
                 >
                   <li className="mb-1" onClick={() => setOpen(false)}>
-                    <Link
+                    <NavLink
                       to="/register"
                       className="hover:text-orange-500 duration-150 font-poppins text-[.96rem] tracking-wide"
                     >
                       Register
-                    </Link>
+                    </NavLink>
                   </li>
                   <li onClick={() => setOpen(false)}>
-                    <Link
+                    <NavLink
                       to="/login"
-                      className="hover:text-orange-500 duration-150 font-poppins text-[.96rem] tracking-wide"
+                      className="hover:text-blue-500 duration-150 font-poppins text-[.96rem] tracking-wide"
                     >
                       Login
-                    </Link>
+                    </NavLink>
                   </li>
                 </ul>
               ) : (
@@ -123,24 +152,24 @@ const NavBar = () => {
                   className="dropdown-content z-[1] menu shadow bg-base-100 rounded-box w-32 p-3"
                 >
                   <li className="mb-1" onClick={() => setOpen(false)}>
-                    <Link
+                    <NavLink
                       to="/create-blog"
-                      className="hover:text-orange-500 duration-150 font-poppins text-[.96rem] tracking-wide"
+                      className="hover:text-blue-500 duration-150 font-poppins text-[.9rem] tracking-wide"
                     >
                       Create Blog
-                    </Link>
+                    </NavLink>
                   </li>
                   <li className="mb-1" onClick={() => setOpen(false)}>
-                    <Link
+                    <NavLink
                       to={`/user/profile/${user._id}`}
-                      className="hover:text-orange-500 duration-150 font-poppins text-[.96rem] tracking-wide"
+                      className="hover:text-blue-500 duration-150 font-poppins text-[.9rem] tracking-wide"
                     >
                       My Blogs
-                    </Link>
+                    </NavLink>
                   </li>
 
                   <button
-                    className="font-medium hover:text-orange-500 duration-150"
+                    className="font-medium hover:text-red-600 duration-150"
                     onClick={handleLogout}
                   >
                     Logout
