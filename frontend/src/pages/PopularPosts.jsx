@@ -35,7 +35,7 @@ const PopularPosts = (props) => {
       >
         {sliceBlog.map((blog) => (
           <SwiperSlide key={blog._id} className="max-w-[45rem] py-12">
-            <div className="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 ">
+            <div className="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]">
               <div className="relative overflow-hidden bg-cover bg-no-repeat">
                 <img
                   className="rounded-lg h-[440px] object-cover max-w-[42rem] mx-auto w-full"
@@ -50,11 +50,11 @@ const PopularPosts = (props) => {
                 </p>
                 <Link
                   to={`/blog/${blog._id}`}
-                  className="my-2 text-xl font-bold font-poppins leading-loose text-neutral-800 dark:text-neutral-50"
+                  className="my-2 text-xl font-bold font-poppins leading-loose text-neutral-800"
                 >
                   {blog.title}
                 </Link>
-                <p className="mb-4 font-poppins text-base text-slate-500 text-[.87rem] dark:text-neutral-200 mt-3 leading-7">
+                <p className="mb-4 font-poppins text-base text-slate-500 text-[.87rem] mt-3 leading-7">
                   {blog.content.length > 300
                     ? blog.content.substring(0, 350) + " ..."
                     : blog.content}

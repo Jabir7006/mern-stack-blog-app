@@ -21,7 +21,7 @@ const NewestPost = ({ blogs }) => {
               <div className="flex flex-col justify-between py-6 lg:mx-6">
                 <Link
                   to={`/blog/${blog._id}`}
-                  className="text-xl font-semibold text-gray-800 hover:underline dark:text-white"
+                  className="text-xl font-semibold text-gray-800 hover:underline"
                 >
                   {blog.title}
                 </Link>
@@ -41,7 +41,7 @@ const NewestPost = ({ blogs }) => {
                     {blog.author.fullName}
                   </Link>
                 </div>
-                <span className="text-sm text-gray-500 dark:text-gray-300">
+                <span className="text-sm text-gray-500">
                   On: {format(new Date(blog.createdAt), "dd MMM yyyy")}
                 </span>
               </div>

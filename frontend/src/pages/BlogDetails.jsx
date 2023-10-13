@@ -23,35 +23,31 @@ const BlogDetails = () => {
           {loadingSpinner}
         </div>
       )}
-      <main className="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased">
+      <main className="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white antialiased">
         <div className="flex justify-between px-4 mx-auto max-w-screen-xl ">
-          <article className="mx-auto w-full max-w-4xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+          <article className="mx-auto w-full max-w-4xl format format-sm sm:format-base lg:format-lg format-blue">
             <header className="mb-4 lg:mb-6 not-format">
               <address className="flex items-center mb-6 not-italic">
-                <div className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                <div className="inline-flex items-center mr-3 text-sm text-gray-900">
                   <img
                     className="mr-4 w-16 h-16 rounded-full object-cover"
                     src={`${baseURL}/${blog.author?.image}`}
                     alt="avatar"
                   />
                   <div>
-                    <a
-                      href="#"
-                      rel="author"
-                      className="text-xl font-bold text-gray-900 dark:text-white"
-                    >
+                    <a href="#" rel="author" className="text-xl font-bold text-gray-900">
                       {blog.author?.fullName}
                     </a>
 
                     {blog.createdAt && (
-                      <p className="text-base text-gray-500 dark:text-gray-400">
+                      <p className="text-base text-gray-500">
                         {format(new Date(blog.createdAt), "dd, MMM, yyyy")}
                       </p>
                     )}
                   </div>
                 </div>
               </address>
-              <h1 className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">
+              <h1 className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl">
                 {blog.title}
               </h1>
             </header>
