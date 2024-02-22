@@ -28,7 +28,6 @@ const useLogin = () => {
         navigate("/");
       }
 
-      console.log(response);
     } catch (error) {
       setIsLoggedIn(false);
       setLoading(false);

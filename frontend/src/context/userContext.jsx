@@ -29,6 +29,7 @@ export const UserProvider = ({ children }) => {
           if (response.status === 200) {
             setUser(response.data.payload.user);
             setIsLoggedIn(true);
+            console.log(response.data.payload.user);
           }
         }
 
@@ -55,3 +56,4 @@ export const UserProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
+

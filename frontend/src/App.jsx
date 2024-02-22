@@ -12,13 +12,13 @@ const MyBlogs = lazy(() => import("./pages/MyBlogs"));
 const BlogDetails = lazy(() => import("./pages/BlogDetails"));
 
 import LoadingSpinner from "./components/LoadingSpinner";
-import { UserContext } from "./context/userContext";
+import { UserContext, UserProvider } from "./context/userContext";
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
 
   return (
-    <>
+    <UserProvider>
       <BrowserRouter>
         <NavBar />
 
@@ -84,7 +84,7 @@ function App() {
         </Routes>
         <Footer />
       </BrowserRouter>
-    </>
+    </UserProvider>
   );
 }
 
