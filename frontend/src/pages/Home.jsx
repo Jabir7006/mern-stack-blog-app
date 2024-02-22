@@ -5,7 +5,8 @@ import axios from "axios";
 import useLogin from "./../hooks/useLogin";
 import { toast } from "react-toastify";
 import BlogCard from "../components/BlogCard";
-import Skeleton from "../components/Skeleton"; 
+import HeroSkeleton from "../components/HeroSkeleton"; // Import HeroSkeleton
+import BlogCardSkeleton from "../components/BlogCardSkeleton";
 import PopularPosts from "./PopularPosts";
 import NewestPost from "../components/NewestPost";
 import NewsLatter from "../components/NewsLatter";
@@ -17,15 +18,12 @@ const Home = () => {
   const [loadMore, setLoadMore] = useState(6);
   const { search } = useContext(UserContext);
   const observer = useRef();
-
   const lastBlogRef = useRef();
 
   const getAllBlogs = async () => {
     try {
       setLoading(true);
-
       const response = await axios.get(`${baseURL}/api/blogs`);
-
       if (response.status === 200) {
         setLoading(false);
         const { blogs } = response.data.payload;
@@ -59,7 +57,6 @@ const Home = () => {
         rootMargin: "20px",
         threshold: 0.1,
       };
-
       observer.current = new IntersectionObserver(handleObserver, options);
       if (lastBlogRef.current) {
         observer.current.observe(lastBlogRef.current);
@@ -78,17 +75,17 @@ const Home = () => {
 
   return (
     <main className="bg-[#fcfbfb]">
-    
       <div className="container mx-auto">
         <div>
-          <Hero blogs={blogs} />
+          {/* Conditional rendering based on loading state */}
+          {loading ? <HeroSkeleton /> : <Hero blogs={blogs} />}
         </div>
 
         <div className="flex flex-wrap items-center justify-center px-3 md:p-4 gap-y-20 gap-x-6 ">
           {loading ? (
             // Render skeleton components while loading
             Array.from({ length: 6 }).map((_, index) => (
-              <Skeleton key={index} /> // Assuming you have a Skeleton component
+              <BlogCardSkeleton key={index} />
             ))
           ) : (
             filteredBlogs.slice(0, loadMore).map((blog, index) => (

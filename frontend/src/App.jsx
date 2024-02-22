@@ -1,6 +1,7 @@
 import React, { lazy, Suspense, useContext } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
 const Register = lazy(() => import("./pages/Register"));
@@ -8,10 +9,10 @@ const Login = lazy(() => import("./pages/Login"));
 const CreateBlog = lazy(() => import("./pages/CreateBlog"));
 const UpdateBlog = lazy(() => import("./pages/UpdateBlog"));
 const MyBlogs = lazy(() => import("./pages/MyBlogs"));
-const Footer = lazy(() => import("./components/Footer"));
 const BlogDetails = lazy(() => import("./pages/BlogDetails"));
 
 import { UserContext } from "./context/userContext";
+import HeroSkeleton from "./components/HeroSkeleton";
 
 function App() {
   const { isLoggedIn, token } = useContext(UserContext);
@@ -22,7 +23,7 @@ function App() {
         <NavBar />
 
         <Routes>
-          <Route path="/" element={<Suspense fallback={<div>Loading...</div>}><Home /></Suspense>} />
+          <Route path="/" element={<Home />} />
           <Route path="/register" element={<Suspense fallback={<div>Loading...</div>}><Register /></Suspense>} />
           <Route path="/login" element={<Suspense fallback={<div>Loading...</div>}><Login /></Suspense>} />
           <Route
@@ -45,7 +46,7 @@ function App() {
             )}
           />
         </Routes>
-        <Suspense fallback={<div>Loading...</div>}><Footer /></Suspense>
+        <Footer />
       </BrowserRouter>
     </>
   );

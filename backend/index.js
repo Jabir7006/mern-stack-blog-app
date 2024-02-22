@@ -11,12 +11,12 @@ require("dotenv").config();
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, async () => {
+app.listen(port, "0.0.0.0", async () => {
   console.log(`Server running successfully at http://localhost:${port}`);
   await connectDB();
 });
 
-const origins = ["https://mern-blog-app-447c.onrender.com", "http://localhost:5173"];
+const origins = ["https://mern-blog-app-447c.onrender.com", "http://localhost:5173", "http://192.168.1.103:5173"];
 
 app.use(cors({ origin: origins, credentials: true }));
 
