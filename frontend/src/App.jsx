@@ -15,7 +15,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import { UserContext, UserProvider } from "./context/userContext";
 
 function App() {
-  const { isLoggedIn } = useContext(UserContext);
+  const { token } = useContext(UserContext);
 
   return (
     <UserProvider>
@@ -43,7 +43,7 @@ function App() {
           <Route
             path="/create-blog"
             element={
-              isLoggedIn ? (
+              token ? (
                 <Suspense fallback={<LoadingSpinner />}>
                   <CreateBlog />
                 </Suspense>
@@ -72,7 +72,7 @@ function App() {
           <Route
             path="/blog/update/:id"
             element={
-              isLoggedIn ? (
+              token ? (
                 <Suspense fallback={<LoadingSpinner />}>
                   <UpdateBlog />
                 </Suspense>
