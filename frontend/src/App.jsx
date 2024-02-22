@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useContext } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 
@@ -12,6 +12,7 @@ const MyBlogs = lazy(() => import("./pages/MyBlogs"));
 const BlogDetails = lazy(() => import("./pages/BlogDetails"));
 
 import LoadingSpinner from "./components/LoadingSpinner";
+import PrivateRoute from "./components/PrivateRoute";
 import { UserContext, UserProvider } from "./context/userContext";
 
 function App() {
@@ -43,13 +44,11 @@ function App() {
           <Route
             path="/create-blog"
             element={
-              token ? (
+              <PrivateRoute>
                 <Suspense fallback={<LoadingSpinner />}>
                   <CreateBlog />
                 </Suspense>
-              ) : (
-                <Navigate to="/login" />
-              )
+              </PrivateRoute>
             }
           />
 
@@ -64,7 +63,7 @@ function App() {
           <Route
             path="/blog/:id"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<LoadingSpinner />}>
                 <BlogDetails />
               </Suspense>
             }
@@ -72,13 +71,11 @@ function App() {
           <Route
             path="/blog/update/:id"
             element={
-              token ? (
+              <PrivateRoute>
                 <Suspense fallback={<LoadingSpinner />}>
                   <UpdateBlog />
                 </Suspense>
-              ) : (
-                <Navigate to="/login" />
-              )
+              </PrivateRoute>
             }
           />
         </Routes>

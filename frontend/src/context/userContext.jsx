@@ -16,10 +16,15 @@ export const UserProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         const storedToken = localStorage.getItem("token");
+        const storedUser = localStorage.getItem("user");
+        
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
 
         if (storedToken) {
           setToken(storedToken);
-
+  
           const response = await axios.get(`${baseURL}/api/users/profile`, {
             headers: {
               Authorization: `Bearer ${storedToken}`,
@@ -29,7 +34,6 @@ export const UserProvider = ({ children }) => {
           if (response.status === 200) {
             setUser(response.data.payload.user);
             setIsLoggedIn(true);
-            console.log(response.data.payload.user);
           }
         }
 
