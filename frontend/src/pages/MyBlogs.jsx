@@ -40,7 +40,6 @@ const MyBlogs = () => {
     }
   };
 
-  console.log(author);
 
   useEffect(() => {
     handleGetUserBlogs();
@@ -58,7 +57,7 @@ const MyBlogs = () => {
 
   return (
     <section className="container mx-auto pb-8">
-      <div className="flex items-center justify-center py-8">
+      <div className="flex items-center justify-center pt-8">
         <img
           src={`${baseURL}/${author?.image}`}
           className="w-28 h-28 rounded-full object-cover"
@@ -66,13 +65,23 @@ const MyBlogs = () => {
         />
       </div>
       {checkAuthor ? (
-        <h3 className="text-5xl font-semibold text-center font-poppins mb-14 py-10">My Blogs</h3>
+        <h3 className="text-2xl font-medium font-poppins mb-14 py-10 border-b border-b-gray-300">My Blogs</h3>
       ) : (
-        <h3 className="text-5xl font-semibold text-center font-p-posts mb-14 py-10">
+        <>
+        <div className="border-b border-gray-300">
+        <h3 className="text-3xl font-semibold font-mono text-center font-p-posts pt-10 mb-5">
           Welcome {author.fullName} profile
         </h3>
+
+        <p className="text-center text-gray-500 mb-8 text-lg font-poppins font-medium">{author?.blogs?.length} Posts</p>
+        {console.log(author)}
+        </div>
+       
+        <h3 className="text-2xl font-medium font-poppins m-3 py-8">{author.fullName} Blogs</h3>
+        </>
+        
       )}
-      <div className="flex mt-14 flex-wrap items-center justify-center md:justify-between gap-y-14">
+      <div className="flex mt-16 flex-wrap items-center justify-center md:gap-x-12 gap-y-14">
         {loading && (
           <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-[9999]">
             {loadingSpinner}

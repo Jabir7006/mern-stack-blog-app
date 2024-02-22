@@ -11,7 +11,7 @@ const HeroSkeleton = () => {
             <div className="w-full md:w-[50%]">
               <p className="my-5 font-bold bg-gray-300 h-6 w-36"></p>
               <div className="text-[2.15rem] md:text-5xl font-bold font-poppins hover:text-blue-600 duration-100 leading-[1.2em] md:leading-[1.3em] bg-gray-300 h-12 w-96"></div>
-              <p className="py-6 font-poppins text-slate-500 text-[.9rem] font-normal md:font-medium leading-6 bg-gray-300 h-24"></p>
+              <p className="py-6 font-poppins text-slate-500 text-[.9rem] font-normal md:font-medium leading-6 bg-gray-300 h-24 mb-6"></p>
               <div className="flex items-center gap-3 bg-gray-300 h-12 w-48">
         
                 <div className="font-semibold font-poppins bg-gray-300 h-6 w-24"></div>
