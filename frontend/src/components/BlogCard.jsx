@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
 import { BiSolidEditAlt } from "react-icons/bi";
-import { AiFillDelete } from "react-icons/ai";
-import { UserContext } from "../context/userContext";
-import axios from "axios";
-import DeleteBlog from "./DeleteBlog";
+import { Link } from "react-router-dom";
 import { baseURL } from "../../Api/api";
+import { UserContext } from "../context/userContext";
+import DeleteBlog from "./DeleteBlog";
 
 const BlogCard = ({ blog, onDelete }) => {
   const { user } = useContext(UserContext);

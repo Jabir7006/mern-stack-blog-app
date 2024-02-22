@@ -16,7 +16,9 @@ app.listen(port, async () => {
   await connectDB();
 });
 
-app.use(cors({ origin: "https://mern-blog-app-447c.onrender.com", credentials: true }));
+const origins = ["https://mern-blog-app-447c.onrender.com", "http://localhost:5173"];
+
+app.use(cors({ origin: origins, credentials: true }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
