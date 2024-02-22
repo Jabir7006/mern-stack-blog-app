@@ -121,6 +121,7 @@ const MyBlogs = () => {
           </div>
         ))}
       </div>
+      {blogs.length === 0 && <h3 className="text-3xl font-semibold text-center font-poppins mb-14 py-10 text-gray-800">No blogs found</h3>}
     </section>
   );
 };

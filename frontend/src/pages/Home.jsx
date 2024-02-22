@@ -1,21 +1,27 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
+import { lazy, Suspense } from "react";
 import Hero from "../components/Hero";
 import { UserContext } from "../context/userContext";
 import axios from "axios";
 import useLogin from "./../hooks/useLogin";
 import { toast } from "react-toastify";
-import BlogCard from "../components/BlogCard";
 import HeroSkeleton from "../components/HeroSkeleton"; // Import HeroSkeleton
 import BlogCardSkeleton from "../components/BlogCardSkeleton";
-import PopularPosts from "./PopularPosts";
-import NewestPost from "../components/NewestPost";
+import BlogCard from "../components/BlogCard";
 import NewsLatter from "../components/NewsLatter";
 import { baseURL } from "../../Api/api";
+import PopularPostsSkeleton from "../components/PopularBlogSkeleton";
+import NewestPostSkeleton from "../components/NewestPostSkeleton";
+
+const PopularPosts = lazy(() => import("../components/PopularPosts"));
+const NewestPost = lazy(() => import("../components/NewestPost"));
+
 
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
-  const { loading, setLoading, loadingSpinner } = useLogin();
+  const { loading, setLoading } = useLogin();
   const [loadMore, setLoadMore] = useState(6);
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(true); // State to control the visibility of the load more button
   const { search } = useContext(UserContext);
   const observer = useRef();
   const lastBlogRef = useRef();
@@ -73,6 +79,10 @@ const Home = () => {
     }
   };
 
+  const handleLoadMoreClick = () => {
+    setLoadMore((prev) => prev + 3);
+  };
+
   return (
     <main className="bg-[#fcfbfb]">
       <div className="container mx-auto">
@@ -81,7 +91,7 @@ const Home = () => {
           {loading ? <HeroSkeleton /> : <Hero blogs={blogs} />}
         </div>
 
-        <div className="flex flex-wrap items-center justify-center px-3 md:p-4 gap-y-20 gap-x-6 ">
+        <div className="flex flex-wrap items-center px-3 md:p-4 gap-y-20 gap-x-6 ">
           {loading ? (
             // Render skeleton components while loading
             Array.from({ length: 6 }).map((_, index) => (
@@ -99,12 +109,28 @@ const Home = () => {
           )}
         </div>
 
+        {/* Conditional rendering of Load More button */}
+        {showLoadMoreButton && filteredBlogs.length > loadMore && (
+          <div className="flex justify-center my-4">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={handleLoadMoreClick}
+            >
+              Load More
+            </button>
+          </div>
+        )}
+
         <div className="px-3">
-          <PopularPosts blogs={blogs} />
+          <Suspense fallback={<PopularPostsSkeleton />}>
+            <PopularPosts blogs={blogs} />
+          </Suspense>
         </div>
 
         <div className="px-3">
-          <NewestPost blogs={blogs} />
+          <Suspense fallback={<NewestPostSkeleton />}>
+            <NewestPost blogs={blogs} />
+          </Suspense>
         </div>
 
         <div>

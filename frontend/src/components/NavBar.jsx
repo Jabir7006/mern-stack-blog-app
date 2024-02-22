@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { baseURL } from "../../Api/api";
 
 const NavBar = () => {
-  const { isLoggedIn, setIsLoggedIn, setToken, setUser, setSearch, user } = useContext(UserContext);
+  const { setIsLoggedIn, token, setToken, setUser, setSearch, user } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -21,7 +21,6 @@ const NavBar = () => {
       setIsLoggedIn(false);
       setUser(null);
       setToken(null);
-      setIsLoggedIn(false);
     } catch (error) {
       console.error("Logout failed", error);
       toast.error("Logout failed");
@@ -66,7 +65,7 @@ const NavBar = () => {
         </div>
 
         <div className="hidden md:block">
-          {!isLoggedIn ? (
+          {!token ? (
             <div className="flex gap-5">
               <Link className="font-medium hover:text-orange-500 duration-150" to="/register">
                 Create Account
@@ -105,7 +104,7 @@ const NavBar = () => {
             </Link>
           </div>
 
-          {user && user.image && isLoggedIn ? (
+          {user && user.image && token ? (
             <img
               src={`${baseURL}/${user?.image}`}
               className="w-10 object-cover h-10 rounded-full cursor-pointer"
@@ -125,7 +124,7 @@ const NavBar = () => {
               ref={dropdownRef}
               className="dropdown dropdown-end absolute top-8 right-0 bg-white drop-shadow-md opacity-100 scale-100 transform"
             >
-              {!isLoggedIn ? (
+              {!token ? (
                 <ul
                   tabIndex={0}
                   className="dropdown-content z-[1] menu shadow bg-base-100 rounded-box w-32 p-3"

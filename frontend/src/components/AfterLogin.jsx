@@ -31,7 +31,7 @@ const AfterLogin = () => {
         <NavLink className="font-medium hover:text-blue-500 duration-150" to="/create-blog">
           Create Blog
         </NavLink>
-        <NavLink className="font-medium hover:text-blue-500 duration-150" to={`/user/profile/${user._id}`}>
+        <NavLink className="font-medium hover:text-blue-500 duration-150" to={`/user/profile/${user?._id}`}>
           My Blogs
         </NavLink>
         <button className="font-medium hover:text-red-600 duration-150" onClick={handleLogout}>
