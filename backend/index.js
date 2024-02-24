@@ -16,7 +16,7 @@ app.listen(port, "0.0.0.0", () => {
   console.log(`Server running successfully at http://localhost:${port}`);
 });
 
-const origins = ["https://mern-blog-app-447c.onrender.com", "http://localhost:5173", "http://192.168.1.103:5173"];
+const origins = ["https://mern-blog-app-447c.onrender.com", "http://localhost:5173", "http://192.168.1.103:5173", "https://mern-blog-app-dusky.vercel.app/"];
 
 app.use(cors({ origin: origins, credentials: true }));
 
