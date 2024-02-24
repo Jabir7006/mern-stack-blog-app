@@ -10,10 +10,10 @@ const path = require("path");
 require("dotenv").config();
 
 const port = process.env.PORT || 5000;
+connectDB();
 
-app.listen(port, "0.0.0.0", async () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Server running successfully at http://localhost:${port}`);
-  await connectDB();
 });
 
 const origins = ["https://mern-blog-app-447c.onrender.com", "http://localhost:5173", "http://192.168.1.103:5173"];
