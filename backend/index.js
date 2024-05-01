@@ -18,7 +18,12 @@ app.listen(port, "0.0.0.0", () => {
 
 const origins = ["https://mern-blog-app-447c.onrender.com", "http://localhost:5173", "http://192.168.1.103:5173", "https://mern-blog-app-dusky.vercel.app"];
 
-app.use(cors({ origin: origins, credentials: true }));
+app.use(cors({
+  origin : "*",
+  credentials : true,
+  methods : ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders : ["Authorization", "Content-Type"],
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
